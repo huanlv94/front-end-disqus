@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Comment</title>
+  <meta ame="author" content="huanlv@topica.edu.vn" />
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+  <script src="https://use.fontawesome.com/7f2f4a15fc.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.26/vue.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/vue.resource/1.0.1/vue-resource.min.js"></script>
+  <link rel=stylesheet href="app.css">
+</head>
+<body>
+  <div id="container">
+    <div class="header">
+      <div class="bread-header">
+        <a href="#" class="active">2 Comment</a>
+        <a href="/forum">Edumall</a>
+      </div>
+      <div class="users">
+        <a href="#" class="dropdown-toggle-users">Lê Văn Huân
+          <i class="fa fa-chevron-down" aria-hidden="true"></i>
+        </a>
+        <ul class="dropdown-menu-users" style="display: none;">
+          <li>
+            <a data-action="auth:edumall" href="#">Edumall</a>
+          </li>
+          <li>
+            <a data-action="auth:facebook" href="#">Facebook</a>
+          </li>
+          <li>
+            <a data-action="auth:twitter" href="#">Twitter</a>
+          </li>
+          <li>
+            <a data-action="auth:google" href="#">Google</a>
+          </li>
+        </ul>
+        <i class="fa fa-comment" aria-hidden="true"></i>
+      </div>
+    </div>
+  </div>
+  <div id="bread-crumd">
+    <div class="bread-crumd-lft">
+      <a href="#">
+        <i class="fa fa-heart"> Quan tâm</i>
+      </a>
+      <a href="#">
+        <i class="fa fa-share"> Chia sẻ</i>
+      </a>
+    </div>
+    <div class="bread-crumd-rgt">
+    <a href="#">Sắp xếp theo bình luận hay nhất</a>
+    </div>
+  </div>
+  <div id="content">
+    <div id="form">
+      <div class="avatar">
+        <i class="fa fa-user fa-3x" aria-hidden="true"></i>
+      </div>
+      <input class="textarea" tabindex="0" role="textbox" aria-multiline="true" contenteditable="PLAINTEXT-ONLY" data-role="editable" aria-label="hagsdahsdgh…" style="overflow: auto; max-height: 350px;">
+      </input>
+      <div class="post-actions">
+        <a href="#" tabindex="-1" data-action="attach" class="attach" title="Upload Images" class="fa fa-file-image-o">
+          <input type="file" data-role="media-upload" tabindex="-1" accept="image/*">
+        </a>
+      </div>
+      <div style='margin: auto;height: 40px;'>
+        <button class='btn-comment'>Post as</button>
+      </div>
+    </div>
+    <!--Hiển thị bài post-->
+    <ul id="post-list" class="post-list">
+      <!--post 1-->
+      <li v-for="post in posts" class="post" id='{{ post.id }}'>
+        <div class="post-content">
+          <div class="avatar">
+            <i class="fa fa-user fa-3x" aria-hidden="true"></i>
+          </div>
+          <div class="post-body">
+            <header class="comment-header">
+              <span class="post-byline">{{ post.author}}</span>
+              <span class="bullet time-ago-bullet" aria-hidden="true">•</span>
+              <span class="post-meta">{{ post.post_in}}</span>
+            </header>
+            <div class="post-message-container">
+              <p>{{ post.text}}</p>
+            </div>
+            <footer class="comment-footer">
+              <menu class="comment-footer-menu">
+                <!--start-->
+                <li class="voting" data-role="voting">
+                  <a href="#" class="vote-up  count-0" data-action="upvote" title="Vote up">
+                    <span class="updatable count" data-role="likes">{{ post.upvote }}</span>
+                    <span class="control">
+                      <i class="fa fa-chevron-up" aria-hidden="true"></i>
+                    </span>
+                  </a>
+                  <span role="button" class="vote-down  count-0" data-action="downvote" title="Vote down">
+                    <span class="control">
+                      <i class="fa fa-chevron-down" aria-hidden="true">{{ post.downvote }}</i>
+                    </span>
+                  </span>
+                </li>
+                <li class="bullet" aria-hidden="true">•</li>
+
+                <li class="edit" data-role="edit-link">
+                  <a href="#" data-action="edit">
+                    <span class="text">Edit</span>
+                  </a>
+                </li>
+                <li class="bullet" aria-hidden="true">•</li>
+
+                <li class="reply"'>
+                  <a data-role="reply-link" data-action="reply" data-id='{{post.id}}'>
+                    <span class="text">Reply</span>
+                  </a>
+                </li>
+                <li class="bullet" aria-hidden="true">•</li>
+
+                <li class="comment-share">
+                  <a class="toggle">
+                    <span class="text">Share ›</span>
+                  </a>
+                </li>
+                <!--end-->
+              </menu>
+            </footer>
+            <!--reply form-->
+            <div style='height: 15px;'></div>
+            <form class="reply-form" id='reply-form-{{post.id}}' style='display: none;'>
+              
+            </form>
+            <!--end reply form-->
+          </div>
+          <!--children comment-->
+          <div v-if='post.children'>
+            <ul data-role="children" class="children" style='margin-top: 10px !important'  v-for='post in post.children_comment'>
+              <li class="post" id="">
+                <div class="post-content">
+                  <div class="avatar">
+                    <i class="fa fa-user fa-3x" aria-hidden="true"></i>
+                  </div>
+                  <div class="post-body">
+                    <header class="comment-header">
+                      <span class="post-byline">{{ post.author}}</span>
+                      <span class="bullet time-ago-bullet" aria-hidden="true">•</span>
+                      <span class="post-meta"> {{ post.post_in }}</span>
+                    </header>
+                    <div class="post-message-container">
+                      <p>{{ post.text }}</p>
+                    </div>
+                    <footer class="comment-footer">
+                      <menu class="comment-footer-menu">
+                        <!--start-->
+                        <li class="voting" data-role="voting">
+                          <a class="vote-up  count-0" data-action="upvote" title="Vote up">
+                            <span class="updatable count" data-role="likes">{{ post.upvote}}</span>
+                            <span class="control">
+                              <i class="fa fa-chevron-up" aria-hidden="true"></i>
+                            </span>
+                          </a>
+                          <span role="button" class="vote-down  count-0" data-action="downvote" title="Vote down">
+                            <span class="control">
+                              <i class="fa fa-chevron-down" aria-hidden="true"></i>
+                            </span>
+                          </span>
+                        </li>
+                        <li class="bullet" aria-hidden="true">•</li>
+
+                        <li class="edit" data-role="edit-link">
+                          <a href="#" data-action="edit">
+                            <span class="text">Edit</span>
+                          </a>
+                        </li>
+                        <li class="bullet" aria-hidden="true">•</li>
+
+                        <li class="reply" data-role="reply-link">
+                          <a data-role="reply-link" data-action="reply" data-id='{{post.id}}'>
+                            <span class="text">Reply</span>
+                          </a>
+                        </li>
+                        <li class="bullet" aria-hidden="true">•</li>
+
+                        <li class="comment-share">
+                          <a class="toggle">
+                            <span class="text">Share ›</span>
+                          </a>
+                        </li>
+                        <!--end-->
+                      </menu>
+                    </footer>
+                    <div style='height: 15px;'></div>
+                    <!--reply form-->
+                    <form class='reply-form' id='reply-form-{{post.id}}'>
+                      
+                    </form>
+                    <!--end reply-->
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+          <!--end chidren comment-->
+        </li>
+      </div>
+    </ul>
+    <!--End bài post-->
+  </div>
+</body>
+<script type="text/javascript" src="app.js"></script>
+<script type="text/javascript" src="lib.js"></script>
+</html>
